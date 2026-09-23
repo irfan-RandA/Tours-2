@@ -1,0 +1,53 @@
+
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RandA Tours CRM</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header><div class="brand small"><div class="logo">RA</div><div><b>RandA Tours CRM</b><span>{{role}}</span></div></div>
+<nav><a class="active" href="/dashboard">Dashboard</a><a href="#customers">Customers</a><a href="#hotels">Hotels & Rooms</a><a href="#itinerary">Itinerary</a><a href="#transport">Transport</a><a href="#import">Excel Import</a><a href="/logout">Logout</a></nav></header>
+<main>
+<section class="hero"><div><h2>Welcome, {{user|capitalize}}</h2><p>Manage your Sri Lanka tour packages, hotel rates, itinerary and transport costing in one place.</p></div><div class="role">{{role}}</div></section>
+<div class="cards">
+  <div class="stat purple"><b id="c-customers">{{counts.customers}}</b><span>Customers</span></div>
+  <div class="stat blue"><b id="c-hotels">{{counts.hotels}}</b><span>Hotel Rate Records</span></div>
+  <div class="stat green"><b id="c-itinerary">{{counts.itinerary}}</b><span>Itinerary Days</span></div>
+  <div class="stat orange"><b id="c-transport">{{counts.transport}}</b><span>Transport Records</span></div>
+</div>
+
+<section id="customers" class="panel"><h3>Customer / Agent CRM</h3>
+<form class="gridform" onsubmit="save(event,'customers')">
+<input name="name" placeholder="Customer name" required><input name="email" placeholder="Email"><input name="mobile" placeholder="Mobile">
+<input name="country" placeholder="Country"><input name="agent" placeholder="Agent"><input name="tour_name" placeholder="Tour package">
+<input name="pax" type="number" min="0" placeholder="Pax"><input name="start_date" type="date"><input name="end_date" type="date">
+<select name="status"><option>Inquiry</option><option>Quotation</option><option>Confirmed</option><option>Completed</option><option>Cancelled</option></select>
+<button class="primary">Add Customer</button></form><div id="customers-table"></div></section>
+
+<section id="hotels" class="panel"><h3>Hotels, Rooms & Rates</h3>
+<form class="gridform" onsubmit="save(event,'hotels')">
+<input name="name" placeholder="Hotel name" required><input name="city" placeholder="Location / City"><input name="area" placeholder="Area">
+<select name="star_category"><option>3 Star</option><option>4 Star</option><option>5 Star</option><option>Luxury</option></select>
+<select name="room_category"><option>STN</option><option>Deluxe</option><option>Superior</option><option>Suite</option></select>
+<select name="bed_type"><option>Twin</option><option>Double</option><option>Triple</option><option>Single</option></select>
+<select name="meal_plan"><option>BB</option><option>HB</option><option>FB</option><option>RO</option></select>
+<input name="rate_usd" type="number" step=".01" placeholder="Rate / room / night USD"><input name="valid_from" type="date"><input name="valid_to" type="date"><input name="distance_km" type="number" step=".1" placeholder="Distance KM">
+<input name="notes" placeholder="Notes"><button class="primary">Add Hotel Rate</button></form><div id="hotels-table"></div></section>
+
+<section id="itinerary" class="panel"><h3>Day-by-Day Itinerary</h3>
+<form class="gridform wide" onsubmit="save(event,'itinerary')">
+<input name="day" type="number" placeholder="Day"><input name="date" type="date"><input name="destination" placeholder="Destination">
+<input name="activities" placeholder="Activities / Sightseeing"><select name="meals"><option>BB</option><option>HB</option><option>FB</option><option>RO</option></select>
+<input name="accommodation" placeholder="Overnight / Hotel"><input name="transport" placeholder="Transport"><input name="notes" placeholder="Notes"><button class="primary">Add Day</button>
+</form><div id="itinerary-table"></div></section>
+
+<section id="transport" class="panel"><h3>Transport Costing</h3>
+<form class="gridform" onsubmit="save(event,'transport')">
+<input name="day" type="number" placeholder="Day"><input name="city" placeholder="City / Route">
+<select name="vehicle_type"><option>Car</option><option>KDH Van</option><option>Flat Roof Van</option><option>Coach / Bus</option></select>
+<input name="km" type="number" step=".1" placeholder="KM"><input name="rate_per_km" type="number" step=".01" placeholder="Rate / KM">
+<input name="total" type="number" step=".01" placeholder="Total"><input name="notes" placeholder="Notes"><button class="primary">Add Transport</button>
+</form><div id="transport-table"></div></section>
+
+<section id="import" class="panel"><h3>Import Existing Excel Costing</h3><p>Upload your <b>Tour_Package_Costing_Template new(3).xlsx</b>. The CRM reads the Tour Costing, Hotel Costing, Transport Costing and Itinerary sheets and imports the operational rows.</p>
+<form action="/api/import-xlsx" method="post" enctype="multipart/form-data"><input type="file" name="file" accept=".xlsx" required><button class="primary">Import Excel</button></form>
+</section>
+</main>
+<script src="/static/app.js"></script></body></html>
